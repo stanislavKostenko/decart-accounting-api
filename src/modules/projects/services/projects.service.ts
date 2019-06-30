@@ -21,13 +21,13 @@ export class ProjectsService {
   }
 
   createProject(body: CreateProjectDto): Observable<Project> {
-    const createdProject = new this.projectModel(body);
-    return of(createdProject.save());
+    const response = new this.projectModel(body);
+    return of(response.save());
   }
 
   updateProject(id: string, body: Project): Observable<Project> {
-    const updatedProject = this.projectModel.findByIdAndUpdate(id, body, { new: true });
-    return of(updatedProject);
+    const response = this.projectModel.findByIdAndUpdate(id, body, { new: true });
+    return of(response);
   }
 
   deleteProject(id: string): Observable<any> {
