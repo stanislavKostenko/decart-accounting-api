@@ -8,7 +8,10 @@ import { config } from '../envConfig';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(config().dbUri),
+    MongooseModule.forRoot(config().dbUri, {
+      useFindAndModify: false,
+      useNewUrlParser: true,
+    }),
     ProjectsModule,
   ],
   controllers: [AppController],

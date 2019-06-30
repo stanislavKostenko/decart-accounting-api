@@ -30,9 +30,8 @@ export class ProjectsService {
     return of(updatedProject);
   }
 
-  deleteProject(id: string): Observable<{success: string}> {
-    const message = Object.assign({}, {success: 'Project has been delete successfully'});
-    this.projectModel.findByIdAndRemove(id, { rawResult: true });
-    return of(message);
+  deleteProject(id: string): Observable<any> {
+    const response = this.projectModel.findByIdAndRemove(id, {select: id});
+    return of(response);
   }
 }

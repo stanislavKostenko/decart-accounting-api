@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ProjectsController } from './controllers/projects/projects.controller';
+import { ProjectsController } from './controller/projects.controller';
 import { ProjectSchema } from '../../schemas/projects.schema';
-import { ProjectsService } from './projects/projects.service';
+import { ProjectsService } from './services/projects.service';
 
 @Module({
   controllers: [ProjectsController],
