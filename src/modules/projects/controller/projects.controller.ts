@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 
 import { ProjectsService } from '../services/projects.service';
 import { CreateProjectDto, UpdateProjectDto } from '../dto/project';
+import { FindOneParams } from '../../../classes/general-validation.class';
 
 @Controller('projects')
 export class ProjectsController {
@@ -14,7 +15,7 @@ export class ProjectsController {
   }
 
   @Get(':id')
-  getProjectById(@Param('id') id: string) {
+  getProjectById(@Param('id') id: FindOneParams) {
     return this.projectService.getProjectById(id);
   }
 
@@ -24,12 +25,12 @@ export class ProjectsController {
   }
 
   @Put(':id')
-  updateProject(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) {
+  updateProject(@Param('id') id: FindOneParams, @Body() updateProjectDto: UpdateProjectDto) {
     return this.projectService.updateProject(id, updateProjectDto);
   }
 
   @Delete(':id')
-  deleteProject(@Param('id') id: string) {
+  deleteProject(@Param('id') id: FindOneParams) {
     return this.projectService.deleteProject(id);
   }
 }
