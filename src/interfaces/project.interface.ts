@@ -5,6 +5,8 @@ export interface Project {
   address: Address;
   archived: boolean;
   square: number;
+  createdDate: string;
+  updatedDate: string;
 }
 
 export interface Address {

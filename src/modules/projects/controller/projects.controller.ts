@@ -29,6 +29,11 @@ export class ProjectsController {
     return this.projectService.updateProject(id, updateProjectDto);
   }
 
+  @Put(':id/archive')
+  archiveProject(@Param('id') id: FindOneParams, @Body() body: {archived: boolean}) {
+    return this.projectService.archivedProject(id, body);
+  }
+
   @Delete(':id')
   deleteProject(@Param('id') id: FindOneParams) {
     return this.projectService.deleteProject(id);

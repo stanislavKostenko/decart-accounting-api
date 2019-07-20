@@ -25,7 +25,7 @@ export class ProjectsService {
   createProject(body: CreateProjectDto): Observable<Project> {
     const today = new Date();
     body.archived = false;
-    body.createdDate = today;
+    body.createdDate = today.toISOString();
     const response = new this.projectModel(body);
     return of(response.save());
   }
@@ -39,6 +39,15 @@ export class ProjectsService {
 
   deleteProject(id: FindOneParams): Observable<any> {
     const response = this.projectModel.findByIdAndRemove(id, { select: id });
+    return of(response);
+  }
+
+  archivedProject(id: FindOneParams, body: {archived: boolean}): Observable<Project> {
+    const project: Project = this.projectModel.findById(id).exec();
+    const today = new Date();
+    project.archived = body.archived;
+    project.updatedDate = today.toDateString();
+    const response = this.projectModel.findByIdAndUpdate(id, project, {new: true});
     return of(response);
   }
 }

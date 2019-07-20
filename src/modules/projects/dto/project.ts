@@ -1,21 +1,21 @@
-import { IsDateString, IsNotEmpty, IsNumber, IsNumberString, MaxLength, MinLength } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, MaxLength, MinLength } from 'class-validator';
 
-import { ProjectEnumErrorMessages } from '../../../enums/project.enum';
 import { Address } from '../../../interfaces/project.interface';
+import { messages, ValidationType } from '../../../enums/project.enum';
 
 export class CreateProjectDto {
   @IsNotEmpty()
-  @MinLength(3, { message: ProjectEnumErrorMessages.MinLength })
-  @MaxLength(20, { message: ProjectEnumErrorMessages.MaxLength })
+  @MinLength(3, { message: messages(ValidationType.MinLength) })
+  @MaxLength(20, { message: messages(ValidationType.MaxLength) })
   readonly title: string;
 
   @IsNotEmpty()
-  @MinLength(3, { message: ProjectEnumErrorMessages.MinLength })
+  @MinLength(3, { message: messages(ValidationType.MinLength) })
   readonly description: string;
 
   readonly address: Address;
   public archived: boolean;
-  public createdDate: Date;
+  public createdDate: string;
 
   @IsNotEmpty()
   @IsNumber()
@@ -24,9 +24,7 @@ export class CreateProjectDto {
 
 export class UpdateProjectDto extends CreateProjectDto {
   @IsNotEmpty()
-  @IsNumberString()
+  @IsString()
   readonly id: string;
-
-  @IsDateString()
   public updatedDate: string;
 }
