@@ -2,7 +2,6 @@ import * as mongoose from 'mongoose';
 
 export const WorkSchema = new mongoose.Schema({
   title: String,
-  costPerItem: Number,
   units: String,
   repeats: Boolean,
   categoryId: String,

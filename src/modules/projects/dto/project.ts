@@ -2,8 +2,9 @@ import { IsNotEmpty, IsNumber, IsString, MaxLength, MinLength } from 'class-vali
 
 import { Address } from '../../../interfaces/project.interface';
 import { messages, ValidationType } from '../../../enums/project.enum';
+import { AbstractDto } from '../../../classes/dto.abstract';
 
-export class CreateProjectDto {
+export class CreateProjectDto extends AbstractDto {
   @IsNotEmpty()
   @MinLength(3, { message: messages(ValidationType.MinLength) })
   @MaxLength(20, { message: messages(ValidationType.MaxLength) })
@@ -15,7 +16,6 @@ export class CreateProjectDto {
 
   readonly address: Address;
   public archived: boolean;
-  public createdDate: string;
 
   @IsNotEmpty()
   @IsNumber()
@@ -26,5 +26,4 @@ export class UpdateProjectDto extends CreateProjectDto {
   @IsNotEmpty()
   @IsString()
   readonly id: string;
-  public updatedDate: string;
 }

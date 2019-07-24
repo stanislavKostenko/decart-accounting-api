@@ -1,25 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { Observable } from 'rxjs';
 
 import { CategoryInterface } from '../../../interfaces/category.interface';
-import { CreateCategoryDto } from '../dto/categories.dto';
-import { Observable, of } from 'rxjs';
+import { CreateCategoryDto, UpdateCategoryDto } from '../dto/categories.dto';
+import { FindOneParams } from '../../../classes/general-validation.class';
+import { DataBaseAbstract } from '../../../classes/db.abstract';
 
 @Injectable()
-export class CategoriesService {
-  constructor(@InjectModel('Categories') private readonly categoryModel: Model<CategoryInterface>) {
+export class CategoriesService extends DataBaseAbstract {
+  constructor(@InjectModel('Categories') protected readonly categoryModel: Model<CategoryInterface>) {
+    super(categoryModel);
   }
 
   getCategories(): Observable<CategoryInterface[]> {
-    const response = this.categoryModel.find().exec();
-    return of(response);
+    return this.getAll();
   }
 
   createCategory(body: CreateCategoryDto): Observable<CategoryInterface> {
-    const today = new Date();
-    body.createdDate = today.toISOString();
-    const response = this.categoryModel(body);
-    return of(response.save());
+    return this.create(body);
+  }
+
+  updateCategory(body: UpdateCategoryDto, id: FindOneParams): Observable<CategoryInterface> {
+    return this.updateById(body, id);
+  }
+
+  deleteCategory(id: FindOneParams): Observable<any> {
+    return this.deleteById(id);
   }
 }

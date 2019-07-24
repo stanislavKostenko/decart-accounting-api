@@ -1,8 +1,9 @@
 import { WorksInterface } from '../../../interfaces/category.interface';
 import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 import { messages, ValidationType } from '../../../enums/project.enum';
+import { AbstractDto } from '../../../classes/dto.abstract';
 
-export class CreateCategoryDto {
+export class CreateCategoryDto extends AbstractDto {
   @IsNotEmpty()
   @MinLength(3, { message: messages(ValidationType.MinLength) })
   @MaxLength(20, { message: messages(ValidationType.MaxLength) })
@@ -13,12 +14,10 @@ export class CreateCategoryDto {
   readonly description: string;
 
   readonly works: WorksInterface[];
-  public createdDate: string;
 }
 
 export class UpdateCategoryDto extends CreateCategoryDto {
   @IsNotEmpty()
   @IsString()
   readonly id: string;
-  public updatedDate: string;
 }

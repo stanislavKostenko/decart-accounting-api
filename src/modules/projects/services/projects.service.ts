@@ -1,53 +1,43 @@
 import { Injectable } from '@nestjs/common';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { CreateProjectDto, UpdateProjectDto } from '../dto/project';
 import { Project } from '../../../interfaces/project.interface';
 import { FindOneParams } from '../../../classes/general-validation.class';
+import { DataBaseAbstract } from '../../../classes/db.abstract';
 
 @Injectable()
-export class ProjectsService {
-  constructor(@InjectModel('Projects') private readonly projectModel: Model<Project>) {
+export class ProjectsService extends DataBaseAbstract {
+  constructor(@InjectModel('Projects') protected readonly projectModel: Model<Project>) {
+    super(projectModel);
   }
 
   getAllProjects(): Observable<Project[]> {
-    const response = this.projectModel.find().exec();
-    return of(response);
+    return this.getAll();
   }
 
   getProjectById(id: FindOneParams): Observable<Project> {
-    const project = this.projectModel.findById(id);
-    return of(project);
+    return this.findById(id);
   }
 
   createProject(body: CreateProjectDto): Observable<Project> {
-    const today = new Date();
     body.archived = false;
-    body.createdDate = today.toISOString();
-    const response = new this.projectModel(body);
-    return of(response.save());
+    return this.create(body);
   }
 
   updateProject(id: FindOneParams, body: UpdateProjectDto): Observable<Project> {
-    const today = new Date();
-    body.updatedDate = today.toDateString();
-    const response = this.projectModel.findByIdAndUpdate(id, body, { new: true });
-    return of(response);
+    return this.updateById(body, id);
   }
 
   deleteProject(id: FindOneParams): Observable<any> {
-    const response = this.projectModel.findByIdAndRemove(id, { select: id });
-    return of(response);
+    return this.deleteById(id);
   }
 
   archivedProject(id: FindOneParams, body: {archived: boolean}): Observable<Project> {
     const project: Project = this.projectModel.findById(id).exec();
-    const today = new Date();
     project.archived = body.archived;
-    project.updatedDate = today.toDateString();
-    const response = this.projectModel.findByIdAndUpdate(id, project, {new: true});
-    return of(response);
+    return this.updateById(project, id);
   }
 }
