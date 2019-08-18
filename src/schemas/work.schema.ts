@@ -7,3 +7,12 @@ export const WorkSchema = new mongoose.Schema({
   createdDate: Date,
   updatedDate: Date,
 }, { versionKey: false });
+
+WorkSchema.virtual('id').get(function() {
+  return this._id.toHexString();
+});
+
+WorkSchema.set('toJSON', {
+  virtuals: true,
+  transform: (doc, ret) => { delete ret._id; },
+});

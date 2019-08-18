@@ -15,5 +15,13 @@ export const ProjectSchema = new mongoose.Schema({
   square: Number,
 }, { versionKey: false });
 
-ProjectSchema.set('toObject', { getters: true });
-ProjectSchema.set('toJSON', { getters: true });
+ProjectSchema.virtual('id').get(function() {
+  return this._id.toHexString();
+});
+
+ProjectSchema.set('toJSON', {
+  virtuals: true,
+  transform: (doc, ret) => {
+    delete ret._id;
+  },
+});
