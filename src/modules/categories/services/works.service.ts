@@ -18,7 +18,7 @@ export class WorksService extends DataBaseAbstract {
   }
 
   getWorks(categoryId: FindOneParams): Observable<WorksInterface[]> {
-    return this.getAllWhere(categoryId);
+    return this.getAllWhere('categoryId', categoryId);
   }
 
   createWork(categoryId: FindOneParams, body: CreateWorkDto): Observable<any> {

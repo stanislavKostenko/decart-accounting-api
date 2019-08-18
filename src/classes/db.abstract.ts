@@ -20,8 +20,8 @@ export class DataBaseAbstract {
     return of(response);
   }
 
-  getAllWhere(where: any): Observable<any[]> {
-    const response = this.model.where(where).exec();
+  getAllWhere(field: string, value: any): Observable<any[]> {
+    const response = this.model.where(field, value).exec();
     return of(response);
   }
 
