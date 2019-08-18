@@ -1,11 +1,13 @@
 import { Model } from 'mongoose';
-import { Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { FindOneParams } from './general-validation.class';
 
 import { ModelDto } from '../types/types';
+import { flatMap } from 'rxjs/operators';
 
 export class DataBaseAbstract {
-  constructor(protected readonly model: Model<any>) {
+  constructor(protected readonly model: Model<any>,
+              protected readonly parentModel?: Model<any>) {
   }
 
   getAll(): Observable<any[]> {
@@ -13,8 +15,18 @@ export class DataBaseAbstract {
     return of(response);
   }
 
+  getAllWithRelationships(child: string): Observable<any> {
+    const response = this.model.find().populate(child).exec();
+    return of(response);
+  }
+
+  getAllWhere(where: any): Observable<any[]> {
+    const response = this.model.where(where).exec();
+    return of(response);
+  }
+
   findById(id: FindOneParams): Observable<any> {
-    const project = this.model.findById(id);
+    const project = this.model.findById(id).exec();
     return of(project);
   }
 
@@ -23,6 +35,17 @@ export class DataBaseAbstract {
     body.createdDate = today.toISOString();
     const response = this.model(body);
     return of(response.save());
+  }
+
+  createSubModel(parentId: FindOneParams, body: ModelDto): Observable<any> {
+    const child = this.model(body);
+    child.save();
+    const parent = this.parentModel.findById(parentId).exec();
+    return from(parent).pipe(flatMap((model: Model) => {
+      model.works.push(child.id);
+      model.save();
+      return of(child);
+    }));
   }
 
   updateById(body: ModelDto, id: FindOneParams): Observable<any> {

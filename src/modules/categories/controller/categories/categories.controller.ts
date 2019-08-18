@@ -16,6 +16,11 @@ export class CategoriesController {
     return this.categoriesService.getCategories();
   }
 
+  @Get(':id')
+  getCategory(@Param('id') id: FindOneParams): Observable<CategoryInterface> {
+    return this.categoriesService.getCategory(id);
+  }
+
   @Post('/create')
   createCategory(@Body() body: CreateCategoryDto): Observable<CategoryInterface> {
     return this.categoriesService.createCategory(body);

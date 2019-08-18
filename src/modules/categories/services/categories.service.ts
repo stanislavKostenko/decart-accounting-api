@@ -15,7 +15,11 @@ export class CategoriesService extends DataBaseAbstract {
   }
 
   getCategories(): Observable<CategoryInterface[]> {
-    return this.getAll();
+    return this.getAllWithRelationships('works');
+  }
+
+  getCategory(id: FindOneParams): Observable<CategoryInterface> {
+    return this.findById(id);
   }
 
   createCategory(body: CreateCategoryDto): Observable<CategoryInterface> {
